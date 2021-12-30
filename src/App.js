@@ -1,4 +1,5 @@
 import ComponentTest from "./components/ComponentTest.js"
+import HomeScreen from "./screens/HomeScreen.js"
 import Header from "./components/Header.js"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom" ;
 
@@ -7,7 +8,8 @@ function App() {
     <Router>
       <Header/>
       <Routes>
-        <Route path = "/" element={<ComponentTest/>}></Route>
+        <Route path = "/" element={<HomeScreen/>}></Route>
+        <Route path = "/discover" element={<ComponentTest/>}></Route>
       </Routes>
     </Router>
   );
