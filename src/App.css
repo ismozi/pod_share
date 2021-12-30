@@ -2,6 +2,57 @@
   text-align: center;
 }
 
+@font-face {
+  font-family: blondFont;
+  src: url(Blonde.ttf);
+}
+
+.mainHeader {
+  background-color: rgb(61, 128, 204);
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items:center;
+  padding-left: 15px;
+  padding-right: 15px;
+  justify-content:space-between;
+  border-bottom: 1px solid #0b2d3d;
+}
+
+#headerContent { 
+  display: flex;
+  justify-content:space-between;
+}
+
+#icon {
+  align-self: center;
+  margin-left: 20px;
+  height:30px;
+  width: 30px;
+}
+
+#link {
+  font-weight: bold;
+  color: black;
+  text-decoration: none;
+}
+
+.logoName {
+  font-family: blondFont;
+  display: inline;
+  font-size:18px;
+}
+
+li {
+  display: inline;
+  margin: 20px;
+}
+
+nav{
+  align-self: center;
+}
+
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -9,7 +60,7 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+    animation: App-logo-spin infinite 40s linear;
   }
 }
 
