@@ -11,6 +11,8 @@ const PodcastPage = () => {
     const [audio, setAudio] = useState("");
     const [episodePlaying, setEpisode] = useState(0);
 
+    var audioPlayer = document.getElementById('audioPlayer');
+
     React.useEffect(async () => {
         await getPodcast();
     }, []);
@@ -41,11 +43,15 @@ const PodcastPage = () => {
     };
 
     const playEpisode = (audioUrl, key) => {
-        setToggled(false)
+        if (toggledPlaying && key != episodePlaying){
+            setToggled(false);
+        }
+
         setPlaying(true);
-        console.log(episodePlaying);
         setAudio(audioUrl);
         setEpisode(key);
+
+        toggledPlaying ? audioPlayer.pause() : audioPlayer.play() ;
     }
 
     const togglePlaying = () => {
@@ -76,7 +82,7 @@ const PodcastPage = () => {
             </div>
             {isPlaying ? 
                 (<footer>
-                        <audio onPlay={() => togglePlaying()} onPause={() => togglePlaying()} autoPlay controls src={audio}></audio>                   
+                        <audio id="audioPlayer" onPlay={() => togglePlaying()} onPause={() => togglePlaying()} autoPlay controls src={audio}></audio>                   
                 </footer>) :  <></>}
         </>
       );
