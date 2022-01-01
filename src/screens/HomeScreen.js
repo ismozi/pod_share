@@ -1,9 +1,8 @@
 import '../App.css';
 import searchIcon from '../searchIcon3.png'
-import unknownImg from '../audioWaves.png'
 import React, { useState } from "react";
 import { CircularProgress } from '@mui/material';
-import { Link } from "react-router-dom";
+import PodcastCard from '../components/PodcastCard';
 
 function HomeScreen() {
   const [value, setValue] = useState("");
@@ -46,11 +45,13 @@ function HomeScreen() {
         <input type="text" id="searchBar" onChange={(e) => setValue(e.target.value)} value={value} placeholder="Ex: Sous Ecoute"></input>
         <button type="submit" id="searchSubmit" value="Search" onClick={(e) => getPodcasts(e)}><img id="searchImg" src={searchIcon}></img></button>
       </form>
-      {!isLoading ? (<div className='podcastsGrid'>
-        {jsonResponse.map((podcast) => {return <Link to={{pathname: "/podcast/", state: {titre: podcast.title}}}><div id="podcastItem" onClick={(e) => selectPodcast(e)}><img className="podcastImg" src={podcast.imageUrl} onError={(e) => e.target.src=unknownImg}></img><div id="podcastTitle">{podcast.title}</div></div></Link>})}
-      </div>) : (<div className='loaderHome'>
-                  <CircularProgress color='success' />
-                </div>)}
+      {!isLoading ? 
+      (<div className='podcastsGrid'>
+        {jsonResponse.map((podcast) => PodcastCard({podcast}))}
+      </div>) : 
+      (<div className='loaderHome'>
+        <CircularProgress color='success' />
+      </div>)}
     </div>
   );
 }
