@@ -9,7 +9,7 @@ function HomeScreen() {
 
   const getPodcasts = async (e) => {
     e.preventDefault();
-    navigate(`/results?name=${value}`)
+    navigate(`/results?name=${value}&page=0`)
   };
 
   return (

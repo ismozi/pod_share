@@ -17,7 +17,7 @@ function PodcastCard({podcast,i}){
     }
     
     return (
-        <Link to={`/podcast?id=${podcast.id}`}>
+        <Link to={`/podcast?id=${podcast.id}&page=0`}>
             <div id="podcastItem">
                 <img className="podcastImg" src={unknownImg}></img>
                 {LoadImage()}

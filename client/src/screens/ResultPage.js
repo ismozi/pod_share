@@ -7,40 +7,44 @@ import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
 function ResultPage() {
-  const [value, setValue] = useState("");
-  const [jsonResponse, setResponse] = useState([]);
-  const [isLoading, setLoading] = useState(true);
-  
   const location = useLocation();
   const urlParams = new URLSearchParams(useLocation().search);
-  const searchedName = urlParams.get('name');
   const navigate = useNavigate();
+
+  const [value, setValue] = useState(urlParams.get('name'));
+  const [jsonResponse, setResponse] = useState([]);
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
-    fetchPodcasts(searchedName)
+    fetchPodcasts(value, urlParams.get('page'))
   }, [location]);
 
-  const fetchPodcasts = async (name) => {
+  const fetchPodcasts = async (name, pageNum) => {
     const options = {
       method: "GET",
       headers:{
         'Content-Type': 'application/json',
       }
     };
-    fetch(`http://localhost:5010/podcasts?name=${name}`, options).then((response) => response.json()).then((json) => {
+    fetch(`http://localhost:5010/podcasts?name=${name}&page=${pageNum}`, options).then((response) => response.json()).then((json) => {
       setResponse(json);
-      console.log(json);
     }
     ).then(() => setLoading(false));   
   };
 
   const getPodcasts = async (e) => {
     e.preventDefault();
-    navigate(`/results?name=${value}`)
-    setValue("");
-    setResponse([]);
+    navigate(`/results?name=${value}&page=0`)
   };
+
+  const nextPage = (e) => {
+    navigate(`/results?name=${value}&page=${jsonResponse.paginatorInfo.currentPage+1}`)
+  }
+
+  const previousPage = (e) => {
+    navigate(`/results?name=${value}&page=${jsonResponse.paginatorInfo.currentPage-1}`)
+  }
 
   return (
     <div className="homeScreen">
@@ -50,9 +54,23 @@ function ResultPage() {
         <button type="submit" id="searchSubmit" value="Search" onClick={(e) => getPodcasts(e)}><img id="searchImg" src={searchIcon}></img></button>
       </form>
       {!isLoading ? 
-      (<div className='podcastsGrid'>
-        {jsonResponse.map((podcast,i) => PodcastCard({podcast,i}))}
-      </div>) : 
+      (<>
+        <div className='podcastsGrid'>
+          {jsonResponse.data.map((podcast,i) => PodcastCard({podcast,i}))}
+        </div>
+        <div id='pagination'>
+          {urlParams.get('page') > 0 ?
+          <button onClick={(e) => previousPage(e)}>
+            Previous
+          </button> : <></>
+          }
+          {jsonResponse.paginatorInfo.hasMorePages ?
+          <button onClick={(e) => nextPage(e)}>
+            Next
+          </button> : <></>
+          }
+        </div>
+      </>) : 
       (<div className='loaderHome'>
         <CircularProgress color='success' />
       </div>)}

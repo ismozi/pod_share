@@ -1,9 +1,15 @@
-import { useLocation } from 'react-router-dom';
 import React, { useState } from "react";
 import { CircularProgress } from '@mui/material';
 import EpisodeCard from '../components/EpisodeCard';
+import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
-const PodcastPage = () => {    
+const PodcastPage = () => {  
+    const location = useLocation();
+    const urlParams = new URLSearchParams(useLocation().search);
+    const navigate = useNavigate();
+    const podcastId = urlParams.get('id');
+
     const [jsonResponse, setResponse] = useState({});
     const [isLoading, setLoading] = useState(true);
     const [isPlaying, setPlaying] = useState(false);
@@ -14,20 +20,18 @@ const PodcastPage = () => {
     var audioPlayer = document.getElementById('audioPlayer');
 
     React.useEffect(async () => {
-        await getPodcast();
-    }, []);
+        setLoading(true);
+        await getPodcast(urlParams.get('page'));
+    }, [location]);
 
-    const urlParams = new URLSearchParams(useLocation().search);
-    const podcastId = urlParams.get('id');
-
-    const getPodcast = async () => {
+    const getPodcast = async (page) => {
         const options = {
             method: "GET",
             headers:{
                 'Content-Type': 'application/json',       
             }
         };
-        fetch(`http://localhost:5010/episodes?podcastId=${podcastId}`, options).then((response) => response.json()).then((json) => {
+        fetch(`http://localhost:5010/episodes?podcastId=${podcastId}&page=${page}`, options).then((response) => response.json()).then((json) => {
             setResponse(json);
             console.log(json);
         }
@@ -50,6 +54,14 @@ const PodcastPage = () => {
     const togglePlaying = () => {
         toggledPlaying ? setToggled(false) : setToggled(true);
     }
+
+    const nextPage = (e) => {
+        navigate(`/podcast?id=${podcastId}&page=${jsonResponse.episodes.paginatorInfo.currentPage+1}`)
+      }
+    
+      const previousPage = (e) => {
+        navigate(`/podcast?id=${podcastId}&page=${jsonResponse.episodes.paginatorInfo.currentPage-1}`)
+      }
     
     return (
         <>
@@ -67,6 +79,18 @@ const PodcastPage = () => {
                     <hr className="solid"/>
                     <div className='episodeList'>
                         {jsonResponse.episodes.data.map((episode, i) => EpisodeCard({episode, playEpisode, episodePlaying,toggledPlaying, i}))}
+                    </div>
+                    <div id='pagination'>
+                        {urlParams.get('page') > 0 ?
+                        <button onClick={(e) => previousPage(e)}>
+                            Previous
+                        </button> : <></>
+                        }
+                        {jsonResponse.episodes.paginatorInfo.hasMorePages ?
+                        <button onClick={(e) => nextPage(e)}>
+                            Next
+                        </button> : <></>
+                        }
                     </div>
                 </>) : 
                 (<div className='loaderHome'>
