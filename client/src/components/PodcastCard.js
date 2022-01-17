@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import unknownImg from '../audioWaves.png'
+import unknownImg from '../img/audioWaves.png'
 
 function PodcastCard({podcast,i}){
 
-    function LoadImage() {
+    function loadImage() {
         setTimeout(() => {
             var img = new Image(),
             x = document.getElementsByClassName("podcastImg").item(i);
@@ -20,7 +20,7 @@ function PodcastCard({podcast,i}){
         <Link id='podcastItemLink' to={`/podcast?id=${podcast.id}&page=0`}>
             <div id="podcastItem">
                 <img className="podcastImg" src={unknownImg}></img>
-                {LoadImage()}
+                {loadImage()}
                 <div id="podcastTitle">{podcast.title}</div>
             </div>
         </Link>

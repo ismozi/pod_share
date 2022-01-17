@@ -1,5 +1,5 @@
 import '../App.css';
-import searchIcon from '../searchIcon3.png'
+import searchIcon from '../img/searchIcon3.png'
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 

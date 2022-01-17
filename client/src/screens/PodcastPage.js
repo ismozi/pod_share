@@ -36,7 +36,6 @@ const PodcastPage = () => {
             console.log(json);
         }
         ).then(() => setLoading(false)); 
-        
     };
 
     const playEpisode = (audioUrl, key) => {
@@ -99,7 +98,7 @@ const PodcastPage = () => {
             </div>
             {isPlaying ? 
                 (<footer>
-                        <audio id="audioPlayer" onPlay={() => togglePlaying()} onPause={() => togglePlaying()} autoPlay controls src={audio}></audio>                   
+                    <audio id="audioPlayer" onPlay={() => togglePlaying()} onPause={() => togglePlaying()} autoPlay controls src={audio}></audio>                   
                 </footer>) :  <></>}
         </>
       );

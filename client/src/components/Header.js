@@ -1,5 +1,5 @@
-import profile from '../profile.png';
-import search from '../searchIcon.png';
+import profile from '../img/profile.png';
+import search from '../img/searchIcon.png';
 import { Link } from "react-router-dom";
 
 function Header(){

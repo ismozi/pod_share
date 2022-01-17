@@ -1,5 +1,5 @@
 import '../App.css';
-import searchIcon from '../searchIcon3.png'
+import searchIcon from '../img/searchIcon3.png'
 import React, { useState, useEffect } from "react";
 import { CircularProgress } from '@mui/material';
 import PodcastCard from '../components/PodcastCard';
