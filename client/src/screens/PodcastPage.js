@@ -3,6 +3,7 @@ import { CircularProgress } from '@mui/material';
 import EpisodeCard from '../components/EpisodeCard';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 const PodcastPage = () => {  
     const location = useLocation();
@@ -16,6 +17,7 @@ const PodcastPage = () => {
     const [toggledPlaying, setToggled] = useState(false);
     const [audio, setAudio] = useState("");
     const [episodePlaying, setEpisode] = useState(0);
+    const [error, toggleError] = useState(false);
 
     var audioPlayer = document.getElementById('audioPlayer');
 
@@ -31,9 +33,14 @@ const PodcastPage = () => {
                 'Content-Type': 'application/json',       
             }
         };
-        fetch(`http://localhost:5010/episodes?podcastId=${podcastId}&page=${page}`, options).then((response) => response.json()).then((json) => {
-            setResponse(json);
-            console.log(json);
+        fetch(`http://localhost:5010/episodes?podcastId=${podcastId}&page=${page}`, options).then((response) => {
+            if(response.status == 200){
+                setResponse(response.json);
+                console.log(response.json);
+            }else {
+                toggleError(true);
+                setLoading(false);
+            }
         }
         ).then(() => setLoading(false)); 
     };
@@ -65,7 +72,7 @@ const PodcastPage = () => {
     return (
         <>
             <div className="homeScreen">
-                {!isLoading ? (
+                {!isLoading && !error ? (
                 <>
                     <div id="podcastPageItem">
                         <img id="podcastPageImg" src={jsonResponse.imageUrl}></img>
@@ -92,6 +99,11 @@ const PodcastPage = () => {
                         }
                     </div>
                 </>) : 
+                error ? (
+                    <>
+                        <div>Information indisponible</div>
+                        <Link to={`/`}><button>Revenir à la page d'accueil</button></Link>
+                    </>) : 
                 (<div className='loaderHome'>
                     <CircularProgress color='success' />
                 </div>)}

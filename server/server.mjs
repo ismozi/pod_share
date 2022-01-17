@@ -66,10 +66,14 @@ app.get("/episodes", (req, res, next) => {
       query: `query maQuery{podcast(identifier: {id: "${req.query.podcastId}", type: PODCHASER}) {title,description,imageUrl,episodes(sort: {sortBy: AIR_DATE}, page: ${req.query.page}) {data {airDate, title, audioUrl}, paginatorInfo {hasMorePages, currentPage}}}}`
     })
   };
-  fetch("https://api.podchaser.com/graphql", options).then((response) => response.json()).then((json) => {
-    console.log(json.data.podcast.episodes);
-    res.status(200).send(JSON.stringify(json.data.podcast))
-  })
+    fetch("https://api.podchaser.com/graphql", options).then((response) => {
+      if (response.status == 200){
+        console.log(response.json.data.podcast.episodes);
+        res.status(200).send(JSON.stringify(response.json.data.podcast));
+      } else {
+        res.status(500).send();
+      }
+    });
 })
 
 http.createServer (app).listen(5010)
